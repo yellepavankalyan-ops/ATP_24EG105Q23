@@ -1,0 +1,74 @@
+### Read all users(req to protected route)
+GET http://localhost:4000/user-api/users
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkJoYW51QGdtYWlsLmNvbSIsImlhdCI6MTc3Mjg3NjUwOCwiZXhwIjoxNzcyODg2NTA4fQ.VllDvRfRrDBKdyEGtZ9SxgB-jVuJSlDvtssArqGBqH0; Path=/; HttpOnly; SameSite=Lax
+
+### Read a users by id
+GET http://localhost:4000/user-api/user
+
+### Create new user
+POST http://localhost:4000/user-api/users
+Content-Type: application/json
+
+{
+    "username":"varu",
+    "password":"varu@1",
+    "email":"varu@gmail.com",
+    "age":26
+}
+
+###
+PUT http://localhost:4000/user-api/users/69aafc7297975ea6168b4cb3
+Content-Type: application/json
+
+{
+    "username":"bhanuk",
+    "password":"Bhanukumar@1",
+    "email":"bhanukumar@gmail.com",
+    "age":29
+}
+
+### Delete a user by id
+DELETE http://localhost:4000/user-api/users/69aafc00d55711dac62482fa
+
+### User authentication
+POST http://localhost:4000/user-api/auth
+Content-Type:application/json
+
+{
+    "email":"Bhanu@gmail.com",
+    "password":"bhanu@1"
+}
+
+
+### Read all products
+GET http://localhost:4000/product-api/products
+
+### Read a product by id
+GET http://localhost:4000/product-api/products/4
+
+### Create new product
+POST http://localhost:4000/product-api/products/
+Content-Type: application/json
+
+{
+    "productId":4,
+    "productName":"bulle",
+    "price":40000,
+    "brand":"Macbook"
+}
+
+
+###
+PUT http://localhost:4000/product-api/products/1
+Content-Type: application/json
+
+{
+    "productId":1,
+    "productName":"TV",
+    "price":40000,
+    "brand":"Sony"
+}
+
+
+### Delete a product by id
+DELETE http://localhost:4000/product-api/products/4
