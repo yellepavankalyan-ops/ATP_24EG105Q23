@@ -1,0 +1,33 @@
+###Admin login
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+ "email":"admin1@gmail.com",
+ "password":"admin1"
+}
+
+
+###read all user and authors by using (email) 
+GET http://localhost:5000/admin-api/users?email=user
+ 
+
+###block or active user or author 
+PATCH http://localhost:5000/admin-api/users
+Content-Type: application/json
+Cookie:
+
+{
+ "userId":"",
+ "isUserActive":false
+}
+
+###change password
+PUT http://localhost:5000/admin-api/password
+Content-Type: application/json
+Cookie: 
+
+{
+ "userId":"",
+ "newPassword":""
+}

@@ -1,0 +1,101 @@
+### register user new to create a new author or user or admin
+POST http://localhost:5000/auth/users
+Content-Type: application/json
+
+{
+   "firstName":"admin1",
+   "lastName":"", 
+   "email":"admin1@gmail.com",
+    "role":"ADMIN",
+   "password":"admin1",
+   "profileImageUrl":"https://example.com/avatars/user.png"
+
+}
+
+###create a new article
+POST   http://localhost:5000/author-api/article
+Content-Type: application/json
+
+{
+   "author":"",
+   "title":"Article-1 by Author 1",
+   "category":"programming",
+   "content":"test article on programming"
+  
+}
+### Create new Article
+POST http://localhost:5000/author-api/article
+Content-Type: application/json
+
+{
+  "author":"",
+  "title":"Article-2 by Author 1",
+  "category":"AI",
+  "content":"test article on AI"
+  
+}
+
+
+### Author Login
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "email":"author1@mail.com",
+  "password":"author1"
+}
+
+### Author logout
+GET http://localhost:5000/auth/logout
+
+### Read own articles
+GET http://localhost:5000/author-api/articles
+
+### Update article by author
+PUT http://localhost:5000/author-api/articles
+Content-Type: application/json
+
+{
+  "articleId":"",
+  "title":"Article-2 by Author 1",
+  "category":"AI",
+  "content":"test article on AI and its updated"
+  
+}
+
+
+### Delete / restore anarticle by Article ID (soft delete)
+PATCH http://localhost:5000/author-api/articles
+Content-Type: application/json
+
+{
+  "articleId":"69b3a8f881ab391ebe9a7435",
+  "isArticleActive":true
+}
+
+
+###read the article by token
+GET http://localhost:5000/user-api/articles
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YjZmNjZhZDBlYmVhZGY3YzdiMmM1MSIsImVtYWlsIjoiYXV0aG9yMUBnbWFpbC5jb20iLCJyb2xlIjoiQVVUSE9SIiwiaWF0IjoxNzczNTk4ODI3LCJleHAiOjE3NzM2MDI0Mjd9.jKJ87StSD-a2qwnvL224DqgkW9zE2x6i__qCdBeZn3c; Path=/; HttpOnly; SameSite=Lax
+
+###delete/restore the  article by id
+PATCH http://localhost:5000/author/author-api/articles
+Content-Type: application/json
+
+{
+   "articleId":"69b3a390e5ec14430e47de3f",
+   "isArticleActive":true
+}
+
+###read articles of all author
+GET http://localhost:5000/user-api/articles
+
+###add comment by user to an articles
+PUT http://localhost:5000/user-api/articles
+Content-Type: application/json
+
+{
+      "articleId":"69b6f748d0ebeadf7c7b2c57",
+      "comment":"nice article man "
+}
+

@@ -1,0 +1,49 @@
+### register user new to create a new user
+POST http://localhost:5000/auth/users
+Content-Type: application/json
+
+{
+   "firstName":"pavankalyan",
+   "lastName":"yelle", 
+   "email":"pava@gmail.com",
+    "role":"USER",
+   "password":"pavankalyan",
+   "profileImageUrl":"https://example.com/avatars/user.png"
+
+}
+
+### user login 
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+    "email":"pava@gmail.com",
+    "password":"pavankalyan"
+    
+}
+
+###users logout
+GET http://localhost:5000/auth/logout
+
+### Read articles of all authors
+GET http://localhost:5000/user-api/articles
+
+### Add comment by user to an article
+PUT http://localhost:5000/user-api/articles
+Content-Type: application/json
+
+{
+  "articleId":"fdgdgdgdfgdfg",
+  "comment":"This is useful article"
+}
+
+
+
+### Change password
+PUT http://localhost:5000/auth/password
+Content-Type: application/json
+
+{
+  "currentPassword":"",
+  "newPassword":""
+}
