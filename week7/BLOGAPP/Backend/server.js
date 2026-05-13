@@ -1,10 +1,10 @@
 import exp from "express";
 import { config } from "dotenv";
 import { connect } from "mongoose";
-import { userApp } from "./APIS/UserApi.js";
-import { authorApp } from "./APIS/AuthorApi.js";
+import { userApp } from "./APIS/UserAPI.js";
+import { authorApp } from "./APIS/AuthorAPI.js";
 import { adminApp } from "./APIS/AdminAPI.js";
-import { commonApp } from "./APIS/CommonApi.js";
+import { commonApp } from "./APIS/CommonAPI.js";
 import dotenv from  "dotenv";
 import cookieParser from "cookie-parser";
 import cors from 'cors'
@@ -14,8 +14,8 @@ dotenv.config();
 const app = exp();
 //enable cors
 app.use(cors({
-  origin:['http://localhost:5173'],
-  credentials:true
+  origin: ['https://blogapp-five-henna.vercel.app'],
+  credentials: true
 }))
 //add cookie parser middeleware
 app.use(cookieParser())
