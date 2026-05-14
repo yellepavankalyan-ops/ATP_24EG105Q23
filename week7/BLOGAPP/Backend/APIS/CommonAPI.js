@@ -3,7 +3,7 @@ import { UserModel } from "../models/UserModel.js";
 import { hash, compare } from "bcryptjs";
 import { config } from "dotenv";
 import jwt from "jsonwebtoken";
-import { verifyToken } from "../middlewares/VerifyToken.js";
+import { verifyToken } from "../middlewares/verifyToken.js";
 const { sign } = jwt;
 export const commonApp = exp.Router();
 import { upload } from "../config/multer.js";

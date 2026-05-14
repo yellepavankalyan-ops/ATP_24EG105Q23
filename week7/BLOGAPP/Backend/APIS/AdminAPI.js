@@ -1,6 +1,6 @@
 import exp from 'express'
 import { UserModel } from "../models/UserModel.js"
-import { verifyToken } from '../middlewares/VerifyToken.js'
+import { verifyToken } from '../middlewares/verifyToken.js'
 import {hash} from "bcryptjs" 
 
 export const adminApp=exp.Router()
