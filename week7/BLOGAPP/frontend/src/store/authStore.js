@@ -60,7 +60,7 @@ export const useAuth = create((set) => ({
   checkAuth: async () => {
     try {
       set({ loading: true });
-      const res = await axios.get("http://localhost:5000/auth/check-auth", { withCredentials: true });
+      const res = await axios.get("https://blog-backend-i6s7.onrender.com/auth/check-auth", { withCredentials: true });
 
       set({
         currentUser: res.data.payload,
