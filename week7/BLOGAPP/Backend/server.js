@@ -14,7 +14,7 @@ dotenv.config();
 const app = exp();
 //enable cors
 app.use(cors({
-  origin: ['https://blogapp-five-henna.vercel.app'],
+  origin: 'https://blogapp-five-henna.vercel.app',
   credentials: true
 }))
 //add cookie parser middeleware

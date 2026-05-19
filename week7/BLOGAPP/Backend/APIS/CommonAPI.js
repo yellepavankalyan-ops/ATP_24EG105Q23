@@ -10,6 +10,7 @@ import { upload } from "../config/multer.js";
 import { uploadToCloudinary } from "../config/cloudinaryUpload.js";
 import cloudinary from "../config/cloudinary.js";
 config();
+const isProduction = process.env.NODE_ENV === "production";
 
 //Register User
 commonApp.post(
@@ -105,11 +106,11 @@ commonApp.post("/login", async (req, res) => {
   );
 
   //set token to res header as httpOnly cookie
-  res.cookie("token", signedToken, {
-    httpOnly: true,
-    secure: false,
-    sameSite: "lax",
-  });
+ res.cookie("token", signedToken, {
+  httpOnly: true,
+  secure: isProduction,                       // true on Render
+  sameSite: isProduction ? "none" : "lax",    // "none" required for cross-site
+});
   //remove password from user document
   let userObj = user.toObject();
   delete userObj.password;
@@ -122,10 +123,10 @@ commonApp.post("/login", async (req, res) => {
 commonApp.get("/logout", (req, res) => {
   //delete token from cookie storage
   res.clearCookie("token", {
-    httpOnly: true,
-    secure: false,
-    sameSite: "lax",
-  });
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? "none" : "lax",
+});
   //send res
   res.status(200).json({ message: "Logout success" });
 });
