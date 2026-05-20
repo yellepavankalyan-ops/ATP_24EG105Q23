@@ -1,0 +1,30 @@
+### create a new employee
+POST http://localhost:3000/emp-api/emp
+Content-Type: application/json
+
+{
+    "name":"rahul",
+    "email":"rahul@gmail.com",
+    "mobile":"9090890798",
+    "designation":"cr",
+    "companyName":"jpmc"
+}
+
+### read all emps
+GET http://localhost:3000/emp-api/emps
+
+### update emps by id
+PUT http://localhost:3000/emp-api/emp/69cb5698fe3c849b57dbcde2
+Content-Type: application/json
+
+{
+   "name":"manu",
+    "email":"manu@gmail.com",
+    "mobile":"9457843848",
+    "designation":"hr",
+    "companyName":"infosys"
+}
+
+### delete emp by id 
+DELETE http://localhost:3000/emp-api/emp/69ca901a07345a7f50b54a63
+
