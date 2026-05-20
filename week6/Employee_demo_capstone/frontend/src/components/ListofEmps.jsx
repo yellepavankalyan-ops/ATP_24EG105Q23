@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import {useNavigate} from 'react-router';
 import axios from 'axios';
-
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function ListOfEmps() {
   const [emps, setEmps] = useState([]);
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function ListOfEmps() {
   }
 
   const deleteEmpByID = async(id) =>{
-    let res= await axios.delete(`http://localhost:2000/emp-api/emps/${id}`)
+    let res= await axios.delete(`https://emp-backend-1-hwrf.onrender.com/emp-api/emps/${id}`)
     if(res.status==200){
       getEmps();
     }
@@ -25,7 +25,7 @@ function ListOfEmps() {
 
 
   async function getEmps() {
-      let res = await fetch("http://localhost:2000/emp-api/emps",{
+      let res = await fetch("https://emp-backend-1-hwrf.onrender.com/emp-api/emps",{
         method: "GET"}
       );
       if (res.status === 200) {

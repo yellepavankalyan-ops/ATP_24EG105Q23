@@ -1,7 +1,7 @@
 import {useContext} from 'react'
 import { counterContextObj} from '../context/ContextProvider'
 import {userCouterStore} from '../store/CouterStore'
-
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function Home() {
   const {newCounter,increaseCounter,decreaseCounter}=userCouterStore();
 

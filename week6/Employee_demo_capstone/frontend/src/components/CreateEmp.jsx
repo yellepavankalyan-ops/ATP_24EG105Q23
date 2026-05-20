@@ -1,12 +1,12 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function CreateEmp() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+  
   const {
     register,
     handleSubmit,
@@ -18,7 +18,7 @@ function CreateEmp() {
     try {
       setLoading(true);
       //make HTTP POST req
-      let res = await fetch("http://localhost:2000/emp-api/emps", {
+      let res = await fetch("https://emp-backend-1-hwrf.onrender.com/emp-api/emps", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newEmpObj),

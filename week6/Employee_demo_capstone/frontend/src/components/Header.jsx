@@ -1,5 +1,5 @@
 import { NavLink } from "react-router";
-
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function Header() {
   return (
     <nav className="flex justify-end text-3xl p-7 bg-gray-400 text-white gap-6">

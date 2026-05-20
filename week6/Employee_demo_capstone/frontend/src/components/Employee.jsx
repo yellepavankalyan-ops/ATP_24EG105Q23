@@ -1,5 +1,5 @@
 import { useLocation } from "react-router"
-
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function Employee() {
 
   const {state}=useLocation();

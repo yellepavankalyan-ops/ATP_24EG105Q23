@@ -9,9 +9,11 @@ config();
 const app=exp();
 
 app.use(cors({
-    origin:["http://localhost:5173"],
-    }),
-);
+    origin: [
+        "http://localhost:5173",
+        "https://atp-24-eg-105-q23.vercel.app"
+    ],
+}));
 
 //use body parser middleware
 app.use(exp.json())
