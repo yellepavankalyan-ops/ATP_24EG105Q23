@@ -35,7 +35,7 @@ function Login() {
 
   useEffect(() => {
     //navigation logic
-    if (isAuthenticated === true) {
+    if (!isAuthenticated || !currentUser) return;
       if (currentUser.role === "USER") {
         //show cuccess toast
         toast.success("Login success and redirecting to User Profile",{duration:2000})
@@ -49,8 +49,7 @@ function Login() {
          toast.success("Login success and redirecting to Admin Profile",{duration:2000})
         navigate("/admin-profile");
       }
-    }
-  }, [isAuthenticated]);
+    }, [isAuthenticated, currentUser]);
 
   //deal with loading
   if (loading) {
