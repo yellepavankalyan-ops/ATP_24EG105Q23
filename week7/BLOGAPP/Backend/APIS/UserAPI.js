@@ -11,6 +11,19 @@ userApp.get("/articles", verifyToken("USER"), async (req, res) => {
   res.status(200).json({ message: "articles" , payload: articlesList });
 });
 
+//Read a single article by ID
+userApp.get("/articles/:id", verifyToken("USER"), async (req, res) => {
+  try {
+    const article = await ArticleModel.findOne({ _id: req.params.id, isArticleActive: true }).populate("comments.user");
+    if (!article) {
+      return res.status(404).json({ message: "Article not found" });
+    }
+    res.status(200).json({ message: "article", payload: article });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching article", error: err.message });
+  }
+});
+
 //Add comment to an article
 userApp.put("/articles", verifyToken("USER"), async (req, res) => {
   //get body from req

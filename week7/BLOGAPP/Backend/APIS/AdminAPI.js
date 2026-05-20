@@ -11,7 +11,7 @@ adminApp.get("/users",verifyToken("ADMIN"),async(req,res)=>
     //get email of users
         const {email} =req.query;
         //find email of user or authors
-        const users=await UserModel.find({email:{$regex:email,$option:"i"},role:{$in:["USER","AUTHOR"]}})
+        const users=await UserModel.find({email:{$regex:email,$options:"i"},role:{$in:["USER","AUTHOR"]}})
         //send response
         res.status(200).json({message:"users",payload:users})
 })    

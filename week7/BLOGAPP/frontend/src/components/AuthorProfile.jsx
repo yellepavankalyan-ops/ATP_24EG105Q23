@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useNavigate } from "react-router";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../store/authStore";
 
 import { pageWrapper, navLinkClass, divider } from "../styles/common";

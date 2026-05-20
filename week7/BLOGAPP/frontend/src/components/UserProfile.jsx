@@ -1,5 +1,5 @@
 import { useAuth } from "../store/authStore";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 const API=import.meta.env.VITE_API_URL;
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -31,7 +31,7 @@ function UserProfile() {
         let res=await axios.get(`${API}/user-api/articles`,{withCredentials:true})
         //update articles state
         if(res.status===200){
-          setArticles((await res).data.payload)
+          setArticles(res.data.payload)
         }
       } catch (err) {
         setError(err.response?.data?.error || "Something went wrong");

@@ -1,11 +1,10 @@
 import exp from "express";
-import { config } from "dotenv";
 import { connect } from "mongoose";
 import { userApp } from "./APIS/UserAPI.js";
 import { authorApp } from "./APIS/AuthorAPI.js";
 import { adminApp } from "./APIS/AdminAPI.js";
 import { commonApp } from "./APIS/CommonAPI.js";
-import dotenv from  "dotenv";
+import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from 'cors'
 dotenv.config();
