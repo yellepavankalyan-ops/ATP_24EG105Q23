@@ -11,11 +11,13 @@ import {
   mutedText,
 } from "../styles/common";
 import { useForm } from "react-hook-form";
-// import { NavLink, useNavigate } from "react-router-dom"
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-const API=import.meta.env.VITE_API_URL;
+import { toast } from "react-hot-toast";
+import { useAuth } from "../store/authStore";
+
+const API = import.meta.env.VITE_API_URL;
 
 function Register() {
   const {
@@ -27,45 +29,49 @@ function Register() {
   const [apiError, setApiError] = useState(null);
   const [preview, setPriview] = useState(null);
   const navigate = useNavigate();
+  const login = useAuth((state) => state.login);
 
-  //When user registration submitted
   const onUserRegister = async (userObj) => {
-    console.log(userObj);
-    let {profileImageUrl}=userObj
-    // file + userObj -->FormData
-    //create ForMData object
+    let { profileImageUrl } = userObj;
     const formData = new FormData();
-    //add all user properties and file to this formdata object
     formData.append("role", userObj.role);
     formData.append("firstName", userObj.firstName);
     formData.append("lastName", userObj.lastName);
     formData.append("email", userObj.email);
     formData.append("password", userObj.password);
-    //Append if image is exists
     if (profileImageUrl?.[0]) {
       formData.append("profileImageUrl", profileImageUrl[0]);
     }
-   console.log(profileImageUrl)
+
     try {
-      //start loading
       setLoading(true);
-      //make HTTP POST req to create User in backend
-      let res = await axios.post(`${API}/auth/users`, formData,{withCredentials:true});
+      setApiError(null);
+      let res = await axios.post(`${API}/auth/users`, formData, {
+        withCredentials: true,
+      });
 
       if (res.status === 201) {
-        //navigate to Login
-        navigate("/login");
+        toast.success("Account created! Logging you in...", { duration: 2000 });
+        // Auto-login so profile loads immediately with all user data
+        await login({ email: userObj.email, password: userObj.password });
+        // Navigation is handled by Login's useEffect via the store,
+        // but since we're not on the Login page, do it here:
+        const role = userObj.role;
+        if (role === "USER") navigate("/user-profile");
+        else if (role === "AUTHOR") navigate("/author-profile");
       }
     } catch (err) {
       console.log("err in registration", err);
-      setApiError(err.response?.data?.error || "Registration failed");
+      setApiError(err.response?.data?.error || err.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className={`${pageBackground} flex items-center justify-center py-16 px-4`}>
+    <div
+      className={`${pageBackground} flex items-center justify-center py-16 px-4`}
+    >
       <div className={formCard}>
         <h2 className={formTitle}>Create an Account</h2>
 
@@ -129,7 +135,9 @@ function Register() {
                   validate: (v) => v.trim().length > 0 || "Cannot be empty",
                 })}
               />
-              {errors.firstName && <p className={errorClass}>{errors.firstName.message}</p>}
+              {errors.firstName && (
+                <p className={errorClass}>{errors.firstName.message}</p>
+              )}
             </div>
 
             <div className="flex-1">
@@ -145,7 +153,9 @@ function Register() {
                   },
                 })}
               />
-              {errors.lastName && <p className={errorClass}>{errors.lastName.message}</p>}
+              {errors.lastName && (
+                <p className={errorClass}>{errors.lastName.message}</p>
+              )}
             </div>
           </div>
 
@@ -160,7 +170,9 @@ function Register() {
                 required: "Email is required",
               })}
             />
-            {errors.email && <p className={errorClass}>{errors.email.message}</p>}
+            {errors.email && (
+              <p className={errorClass}>{errors.email.message}</p>
+            )}
           </div>
 
           {/* PASSWORD */}
@@ -174,7 +186,9 @@ function Register() {
                 required: "Password is required",
               })}
             />
-            {errors.password && <p className={errorClass}>{errors.password.message}</p>}
+            {errors.password && (
+              <p className={errorClass}>{errors.password.message}</p>
+            )}
           </div>
 
           {/* PROFILE IMAGE */}
@@ -189,11 +203,16 @@ function Register() {
                 validate: {
                   fileType: (files) => {
                     if (!files?.[0]) return true;
-                    return ["image/png", "image/jpeg"].includes(files[0].type) || "Only JPG/PNG allowed";
+                    return (
+                      ["image/png", "image/jpeg"].includes(files[0].type) ||
+                      "Only JPG/PNG allowed"
+                    );
                   },
                   fileSize: (files) => {
                     if (!files?.[0]) return true;
-                    return files[0].size <= 2 * 1024 * 1024 || "MAx size 2MB";
+                    return (
+                      files[0].size <= 2 * 1024 * 1024 || "Max size 2MB"
+                    );
                   },
                 },
               })}
@@ -205,18 +224,54 @@ function Register() {
               }}
             />
 
-            {errors.profileImageUrl && <p className={errorClass}>{errors.profileImageUrl.message}</p>}
+            {errors.profileImageUrl && (
+              <p className={errorClass}>{errors.profileImageUrl.message}</p>
+            )}
             {/* image preview */}
             {preview && (
               <div className="mt-3 flex justify-center">
-                <img src={preview} alt="" className="w-24 h-24 rounded-full object-cover" />
+                <img
+                  src={preview}
+                  alt=""
+                  className="w-24 h-24 rounded-full object-cover"
+                />
               </div>
             )}
           </div>
 
           {/* SUBMIT */}
-          <button type="submit" className={submitBtn}>
-            Create Account
+          <button
+            type="submit"
+            className={`${submitBtn} flex items-center justify-center gap-2`}
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <svg
+                  className="animate-spin h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8z"
+                  />
+                </svg>
+                Creating account...
+              </>
+            ) : (
+              "Create Account"
+            )}
           </button>
         </form>
 
