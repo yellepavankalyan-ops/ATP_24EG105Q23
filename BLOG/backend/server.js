@@ -16,7 +16,8 @@ const app = exp();
 
 // ✅ FINAL CORS CONFIG (handles everything)
 const allowedOrigins = [
-  "https://atp-24eg105q04-q2ta.vercel.app"
+   "http://localhost:5173",
+  "https://blogfrontend-gold.vercel.app"
 
 ];
 
