@@ -13,7 +13,6 @@ import {
 } from "../styles/common";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../store/authStore";
-import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 
 function Login() {
@@ -24,35 +23,33 @@ function Login() {
   } = useForm();
 
   const navigate = useNavigate();
-  const { login, currentUser, loading, error, isAuthenticated } = useAuth(
-    (state) => state
-  );
 
-  const onUserLogin = (userCredObj) => {
-    login(userCredObj);
+  // Pull primitives individually so re-renders are minimal
+  const login   = useAuth((state) => state.login);
+  const loading = useAuth((state) => state.loading);
+  const error   = useAuth((state) => state.error);
+
+  const onUserLogin = async (userCredObj) => {
+    // Await the login action — the store sets currentUser before resolving
+    await login(userCredObj);
+
+    // Read the store directly after await (not from closure) to get fresh values
+    const { isAuthenticated, currentUser } = useAuth.getState();
+
+    if (!isAuthenticated || !currentUser) return; // error case — store has error set
+
+    const routes = {
+      USER:   "/user-profile",
+      AUTHOR: "/author-profile",
+      ADMIN:  "/admin-profile",
+    };
+
+    const dest = routes[currentUser.role];
+    if (dest) {
+      toast.success("Login successful!", { duration: 2000 });
+      navigate(dest);
+    }
   };
-
-  useEffect(() => {
-    if (!isAuthenticated || !currentUser) return;
-    if (currentUser.role === "USER") {
-      toast.success("Login success and redirecting to User Profile", {
-        duration: 2000,
-      });
-      navigate("/user-profile");
-    }
-    if (currentUser.role === "AUTHOR") {
-      toast.success("Login success and redirecting to Author Profile", {
-        duration: 2000,
-      });
-      navigate("/author-profile");
-    }
-    if (currentUser.role === "ADMIN") {
-      toast.success("Login success and redirecting to Admin Profile", {
-        duration: 2000,
-      });
-      navigate("/admin-profile");
-    }
-  }, [isAuthenticated, currentUser]);
 
   return (
     <div
@@ -109,7 +106,7 @@ function Login() {
             </a>
           </div>
 
-          {/* Submit — shows spinner inline, never replaces the whole page */}
+          {/* Submit */}
           <button
             type="submit"
             className={`${submitBtn} flex items-center justify-center gap-2`}

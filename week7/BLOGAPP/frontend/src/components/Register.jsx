@@ -52,17 +52,29 @@ function Register() {
 
       if (res.status === 201) {
         toast.success("Account created! Logging you in...", { duration: 2000 });
-        // Auto-login so profile loads immediately with all user data
+
+        // Await login so the store is fully updated before we navigate
         await login({ email: userObj.email, password: userObj.password });
-        // Navigation is handled by Login's useEffect via the store,
-        // but since we're not on the Login page, do it here:
-        const role = userObj.role;
-        if (role === "USER") navigate("/user-profile");
-        else if (role === "AUTHOR") navigate("/author-profile");
+
+        // Read store directly after await for the freshest state
+        const { isAuthenticated, currentUser } = useAuth.getState();
+
+        if (isAuthenticated && currentUser) {
+          const routes = {
+            USER:   "/user-profile",
+            AUTHOR: "/author-profile",
+          };
+          const dest = routes[currentUser.role];
+          if (dest) navigate(dest);
+        }
       }
     } catch (err) {
       console.log("err in registration", err);
-      setApiError(err.response?.data?.error || err.response?.data?.message || "Registration failed");
+      setApiError(
+        err.response?.data?.error ||
+          err.response?.data?.message ||
+          "Registration failed"
+      );
     } finally {
       setLoading(false);
     }
@@ -124,14 +136,8 @@ function Register() {
                 placeholder="First name"
                 {...register("firstName", {
                   required: "First name is required",
-                  minLength: {
-                    value: 2,
-                    message: "At least 2 characters required",
-                  },
-                  maxLength: {
-                    value: 30,
-                    message: "Max 30 characters allowed",
-                  },
+                  minLength: { value: 2, message: "At least 2 characters required" },
+                  maxLength: { value: 30, message: "Max 30 characters allowed" },
                   validate: (v) => v.trim().length > 0 || "Cannot be empty",
                 })}
               />
@@ -147,10 +153,7 @@ function Register() {
                 className={inputClass}
                 placeholder="Last name"
                 {...register("lastName", {
-                  maxLength: {
-                    value: 30,
-                    message: "Max 30 characters allowed",
-                  },
+                  maxLength: { value: 30, message: "Max 30 characters allowed" },
                 })}
               />
               {errors.lastName && (
@@ -166,9 +169,7 @@ function Register() {
               type="email"
               className={inputClass}
               placeholder="you@example.com"
-              {...register("email", {
-                required: "Email is required",
-              })}
+              {...register("email", { required: "Email is required" })}
             />
             {errors.email && (
               <p className={errorClass}>{errors.email.message}</p>
@@ -182,9 +183,7 @@ function Register() {
               type="password"
               className={inputClass}
               placeholder="Min. 8 characters"
-              {...register("password", {
-                required: "Password is required",
-              })}
+              {...register("password", { required: "Password is required" })}
             />
             {errors.password && (
               <p className={errorClass}>{errors.password.message}</p>
@@ -210,24 +209,19 @@ function Register() {
                   },
                   fileSize: (files) => {
                     if (!files?.[0]) return true;
-                    return (
-                      files[0].size <= 2 * 1024 * 1024 || "Max size 2MB"
-                    );
+                    return files[0].size <= 2 * 1024 * 1024 || "Max size 2MB";
                   },
                 },
               })}
               onChange={(event) => {
                 let file = event.target.files[0];
-                if (file) {
-                  setPriview(URL.createObjectURL(file));
-                }
+                if (file) setPriview(URL.createObjectURL(file));
               }}
             />
 
             {errors.profileImageUrl && (
               <p className={errorClass}>{errors.profileImageUrl.message}</p>
             )}
-            {/* image preview */}
             {preview && (
               <div className="mt-3 flex justify-center">
                 <img
