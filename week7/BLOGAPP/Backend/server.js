@@ -14,9 +14,19 @@ dotenv.config();
 const app = exp();
 //enable cors
 app.use(cors({
-  origin: 'https://blogapp-five-henna.vercel.app',
+  origin: (origin, callback) => {
+    if (
+      !origin ||
+      origin === "http://localhost:5173" ||
+      /^https:\/\/.*\.vercel\.app$/.test(origin)
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
-}))
+}));
 //add cookie parser middeleware
 app.use(cookieParser())
 //body parser middleware
